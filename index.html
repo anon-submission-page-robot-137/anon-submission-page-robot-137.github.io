@@ -101,15 +101,15 @@
     .takeaways li::before { left: 12px; top: 10px; }
   }
   .viewer { margin: 18px 0 10px; }
-  .tabs { display: flex; flex-wrap: wrap; align-items: baseline; row-gap: 2px; margin: 0 0 5px; font-size: .95rem; line-height: 1.5; }
+  .tabs { display: flex; flex-wrap: wrap; align-items: center; row-gap: 6px; margin: 0 0 8px; font-size: .95rem; line-height: 1.4; }
   .tabs .lab { flex: none; width: 4.6em; font-variant: small-caps; letter-spacing: .04em; color: var(--muted); }
-  .tabs button { font: inherit; color: var(--link); background: none; border: 0; border-left: 1px solid var(--rule); padding: 0 10px; margin: 0; cursor: pointer; }
-  .tabs .lab + button, .tabs .grp + button { border-left: 0; padding-left: 0; }
+  .tabs button { font: inherit; color: var(--link); background: var(--bg); border: 1px solid var(--rule); border-radius: 3px; padding: 2px 11px; margin: 0 6px 0 0; cursor: pointer; transition: background .12s, border-color .12s; }
   .tabs .grp { color: var(--text); margin: 0 8px 0 0; }
-  .tabs .set { display: inline-flex; flex-wrap: nowrap; align-items: baseline; white-space: nowrap; margin-right: 22px; }
-  .tabs button:hover { text-decoration: underline; text-underline-offset: 3px; }
-  .tabs button[aria-selected="true"] { color: var(--text); font-weight: 600; text-decoration: none; cursor: default; }
-  @media (max-width: 640px) { .tabs { font-size: .9rem; } .tabs .lab { width: 100%; } .tabs button { padding: 0 7px; } .tabs .set { flex-wrap: wrap; white-space: normal; } }
+  .tabs .set { display: inline-flex; flex-wrap: nowrap; align-items: center; white-space: nowrap; margin-right: 18px; }
+  .tabs button:hover { border-color: var(--link); background: var(--tint); }
+  .tabs button:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+  .tabs button[aria-selected="true"] { color: var(--bg); background: var(--link); border-color: var(--link); font-weight: 600; cursor: default; }
+  @media (max-width: 640px) { .tabs { font-size: .9rem; } .tabs .lab { width: 100%; } .tabs button { padding: 2px 9px; } .tabs .set { flex-wrap: wrap; white-space: normal; row-gap: 6px; } }
   .vtitle { font-size: 1.15rem; font-weight: 600; color: var(--text); margin: 2px 0 8px; }
   .vcalls { position: absolute; left: 10px; bottom: 10px; max-width: calc(100% - 20px); background: rgba(0,0,0,.66); color: #ddd; border-radius: 3px; padding: 5px 9px; font: 12.5px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; pointer-events: none; }
   .vcalls:empty { display: none; }
