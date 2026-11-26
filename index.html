@@ -165,7 +165,7 @@
 
 <figure>
   <div class="wide"><img src="fig/teaser.png" alt="Top: play data on an open table. Bottom: the robot tips the Hootbot upright, carries it and pushes it under a bridge."></div>
-  <figcaption><b>Planning from play.</b> Task-agnostic play (top) records how the robot's interactions move the Hootbot on an open table, each relative to the object. Facing a bridge at test time (bottom), the planner grounds three of these interactions at new poses and composes them to tip the Hootbot upright, carry it to the bridge and push it under, replanning after each outcome. The goal is outlined in green.</figcaption>
+  <figcaption><b>Planning from play.</b> Play data (top) records open-ended interactions on an open table to capture how the Hootbot responds to contact, segmented into object-relative transitions. A bridge (bottom) is added at test time, and our planner grounds three of these transitions (outlined above) at new poses and composes them to tip the Hootbot upright, carry it to the bridge, and push it under, replanning after each outcome. The goal is outlined in green.</figcaption>
 </figure>
 
 <h2>Video</h2>
@@ -179,10 +179,11 @@
 
 <h2>Key takeaways</h2>
 <ol class="takeaways">
-  <li><b>Minutes of play are enough.</b> 5 to 11 minutes per object support plans of up to 14 interactions, with new goals and obstacles.</li>
+  <li><b>Minutes of play are enough.</b> 5 to 11 minutes per object support plans of up to 14 transitions, with new goals and obstacles.</li>
   <li><b>Learn only what is hard to model.</b> Contact outcomes come from play. Reachability, collisions and free-space motion come from the robot model and scene geometry.</li>
   <li><b>Express interactions relative to the object.</b> A push recorded at one spot becomes a candidate push anywhere on the table.</li>
   <li><b>Search, then replan.</b> Replanning after every transition absorbs execution error. Search finds detours that a greedy controller would miss.</li>
+  <li><b>Coverage decides what is solvable.</b> Without search bounds, the planner finds a plan whenever its transitions can compose one.</li>
 </ol>
 
 <h2>Method</h2>
@@ -191,7 +192,7 @@
   <div>
     <h3>1. Play becomes transitions</h3>
 <ul class="points">
-  <li><b>Play with no task in mind.</b> <span>An operator pushes, slides, tips and picks the object.</span></li>
+  <li><b>Play with no task in mind.</b> <span>Developmental psychology calls this exploratory play, in which infants test a new object to see how it behaves. Here an operator pushes, slides, tips and picks the object.</span></li>
   <li><b>Cut where the object is at rest.</b> <span>On a face on the table, or grasped.</span></li>
   <li><b>Record everything relative to the object.</b> <span>The gripper motion and the object displacement, in the object's own frame.</span></li>
 </ul>
@@ -221,7 +222,7 @@
 <ul class="points">
   <li><b>Scan the scene once.</b> <span>Depth cameras give the obstacle geometry.</span></li>
   <li><b>Keep only feasible transitions.</b> <span>The object clears obstacles, and the arm can follow the motion without collisions.</span></li>
-  <li><b>Search from both ends.</b> <span>Forward from the start and backward from the goal, meeting at a recorded interaction. Plans are scored by their interactions and object motion, plus the remaining distance to the goal pose.</span></li>
+  <li><b>Search from both ends.</b> <span>Forward from the start and backward from the goal, meeting at a subgoal. Plans are scored by their transitions and object motion, plus the remaining distance to the goal pose.</span></li>
 </ul>
 <figure>
   <div class="wide"><img src="fig/planning-framework.png" alt="Planning framework on a toy train: transitions from play, workspace constraints with a barrier and low shelf, and forward and backward search over support modes."></div>
@@ -247,7 +248,7 @@
 <ul class="points">
   <li><b>A bridge never seen in play.</b> <span>Three objects must end up under it.</span></li>
   <li><b>Reorientation first.</b> <span>The Hootbot and the train start on their sides.</span></li>
-  <li><b>26 of 30 trials succeed.</b> <span>Within 10&nbsp;mm and 10°, with a median of five interactions.</span></li>
+  <li><b>26 of 30 trials succeed.</b> <span>Within 10&nbsp;mm and 10°, with a median of five transitions.</span></li>
 </ul>
 <p class="hint">Pick an object and a method. Trial numbers are the same for all methods, so the same trial starts from the same pose.</p>
 <div class="viewer" id="v-real">
@@ -272,10 +273,10 @@
 <ul class="points">
   <li><b>Pushed away, then replanned.</b> <span>The plan continues from wherever the object lands.</span></li>
   <li><b>New obstacle layouts and goals.</b> <span>The same play data, with no new recording.</span></li>
-  <li><b>Longer plans.</b> <span>Up to 23 interactions, mixing pushes with picks and places.</span></li>
+  <li><b>Longer plans.</b> <span>Up to 23 transitions, mixing pushes with picks and places.</span></li>
 </ul>
 <div class="viewer" id="v-qual">
-<script type="application/json">{"groups":[{"name":"","methods":[{"name":"","title":"","items":[{"src":"vid/qual/spoon_perturb.mp4","cap":"The spoon is pushed away twice by hand. The robot replans and still reaches the goal. Final error 9.9&nbsp;mm, 1.8°."},{"src":"vid/qual/hootbot_two_bridges.mp4","cap":"Two bridges. The Hootbot slides out from under one and is pushed under the other, in 8 interactions. Final error 2.5&nbsp;mm, 8.0°."},{"src":"vid/qual/spoon_show_t01.mp4","cap":"A new layout for the spoon, solved in 4 interactions. Final error 3.9&nbsp;mm, 7.2°."},{"src":"vid/qual/spoon_show_t07.mp4","cap":"Another layout, with the goal 34&nbsp;cm away and turned 70°. 10 interactions. Final error 5.6&nbsp;mm, 3.4°."},{"src":"vid/qual/hootbot_show_t07.mp4","cap":"The Hootbot must end between two towers, under a bar. Pushes plus two pick and places, 23 interactions. Final error 5.6&nbsp;mm, 8.5°."}]}]}],"glabel":""}</script>
+<script type="application/json">{"groups":[{"name":"","methods":[{"name":"","title":"","items":[{"src":"vid/qual/spoon_perturb.mp4","cap":"The spoon is pushed away twice by hand. The robot replans and still reaches the goal. Final error 9.9&nbsp;mm, 1.8°."},{"src":"vid/qual/hootbot_two_bridges.mp4","cap":"Two bridges. The Hootbot slides out from under one and is pushed under the other, in 8 transitions. Final error 2.5&nbsp;mm, 8.0°."},{"src":"vid/qual/spoon_show_t01.mp4","cap":"A new layout for the spoon, solved in 4 transitions. Final error 3.9&nbsp;mm, 7.2°."},{"src":"vid/qual/spoon_show_t07.mp4","cap":"Another layout, with the goal 34&nbsp;cm away and turned 70°. 10 transitions. Final error 5.6&nbsp;mm, 3.4°."},{"src":"vid/qual/hootbot_show_t07.mp4","cap":"The Hootbot must end between two towers, under a bar. Pushes plus two pick and places, 23 transitions. Final error 5.6&nbsp;mm, 8.5°."}]}]}],"glabel":""}</script>
 </div>
 
 <h2>Simulation</h2>
